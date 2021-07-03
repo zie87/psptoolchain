@@ -33,10 +33,10 @@ index 75bb6a3135b..676dcba3d9a 100755
  			| mn10200 | mn10300 \
  			| moxie \
 diff --git a/gcc/config.gcc b/gcc/config.gcc
-index b2282ecdf0b..bdc97be7f21 100644
+index 94885c7d758..67f8a208b98 100644
 --- a/gcc/config.gcc
 +++ b/gcc/config.gcc
-@@ -2457,6 +2457,18 @@ mipstx39-*-elf* | mipstx39el-*-elf*)
+@@ -2458,6 +2458,18 @@ mipstx39-*-elf* | mipstx39el-*-elf*)
  	tm_file="elfos.h newlib-stdint.h ${tm_file} mips/r3900.h mips/elf.h"
  	tmake_file="mips/t-r3900"
  	;;
@@ -797,7 +797,7 @@ index 81be1fd67ec..a7cba2c21a9 100644
  COMPILE = source='$<' object='$@' libtool=no DEPDIR=$(DEPDIR) $(DEPMODE) \
  	  $(depcomp) $(COMPILE.base)
 diff --git a/libgcc/config.host b/libgcc/config.host
-index 0f15fda3612..ccff9d5c695 100644
+index bdbf77a3e62..b817db36ef4 100644
 --- a/libgcc/config.host
 +++ b/libgcc/config.host
 @@ -147,11 +147,15 @@ microblaze*-*-*)
@@ -818,7 +818,7 @@ index 0f15fda3612..ccff9d5c695 100644
  	else
  		tmake_file="${tmake_file} t-softfp-sfdf"
  	fi
-@@ -987,6 +991,14 @@ mips-wrs-vxworks)
+@@ -997,6 +1001,14 @@ mips-wrs-vxworks)
  mipstx39-*-elf* | mipstx39el-*-elf*)
  	tmake_file="$tmake_file mips/t-crtstuff mips/t-mips16"
  	;;
@@ -918,10 +918,10 @@ index 00000000000..10682690219
 +    _lt_sf _le_sf _unord_sf _si_to_sf _sf_to_si _negate_sf \
 +    _thenan_sf _sf_to_usi _usi_to_sf
 diff --git a/libgcc/configure b/libgcc/configure
-index 36dbbc1f699..92517a1f931 100644
+index 8ceec1d047f..52beefc86ad 100755
 --- a/libgcc/configure
 +++ b/libgcc/configure
-@@ -5036,6 +5036,26 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+@@ -5048,6 +5048,26 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
  fi
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $libgcc_cv_mips_hard_float" >&5
  $as_echo "$libgcc_cv_mips_hard_float" >&6; }
@@ -949,7 +949,7 @@ index 36dbbc1f699..92517a1f931 100644
  
  case ${host} in
 diff --git a/libgcc/configure.ac b/libgcc/configure.ac
-index 8e96cafdf8b..77af122b546 100644
+index 61356d0721d..d6f074ce47c 100644
 --- a/libgcc/configure.ac
 +++ b/libgcc/configure.ac
 @@ -302,6 +302,14 @@ mips*-*-*)

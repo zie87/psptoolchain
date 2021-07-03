@@ -1,8 +1,8 @@
 diff --git a/config.sub b/config.sub
-index 75bb6a3135b..676dcba3d9a 100755
+index a318a468685..761ed8a0aab 100755
 --- a/config.sub
 +++ b/config.sub
-@@ -632,6 +632,10 @@ case $1 in
+@@ -629,6 +629,10 @@ case $1 in
  				basic_machine=ymp-cray
  				os=unicos
  				;;
@@ -13,7 +13,7 @@ index 75bb6a3135b..676dcba3d9a 100755
  			*)
  				basic_machine=$1
  				os=
-@@ -644,6 +648,10 @@ esac
+@@ -641,6 +645,10 @@ esac
  case $basic_machine in
  	# Here we handle the default manufacturer of certain CPU types.  It is in
  	# some cases the only manufacturer, in others, it is the most popular.
@@ -24,7 +24,7 @@ index 75bb6a3135b..676dcba3d9a 100755
  	w89k)
  		cpu=hppa1.1
  		vendor=winbond
-@@ -1210,6 +1218,7 @@ case $cpu-$vendor in
+@@ -1209,6 +1217,7 @@ case $cpu-$vendor in
  			| mipsisa64sr71k | mipsisa64sr71kel \
  			| mipsr5900 | mipsr5900el \
  			| mipstx39 | mipstx39el \
@@ -33,10 +33,10 @@ index 75bb6a3135b..676dcba3d9a 100755
  			| mn10200 | mn10300 \
  			| moxie \
 diff --git a/gcc/config.gcc b/gcc/config.gcc
-index b2282ecdf0b..bdc97be7f21 100644
+index 6fcdd771d4c..7612b2d9d6f 100644
 --- a/gcc/config.gcc
 +++ b/gcc/config.gcc
-@@ -2457,6 +2457,18 @@ mipstx39-*-elf* | mipstx39el-*-elf*)
+@@ -2717,6 +2717,18 @@ mipstx39-*-elf* | mipstx39el-*-elf*)
  	tm_file="elfos.h newlib-stdint.h ${tm_file} mips/r3900.h mips/elf.h"
  	tmake_file="mips/t-r3900"
  	;;
@@ -234,7 +234,7 @@ index 00000000000..97ed72f8821
 +  [(set_attr "type"    "fcvt")
 +   (set_attr "mode"    "SF")])
 diff --git a/gcc/config/mips/mips-cpus.def b/gcc/config/mips/mips-cpus.def
-index 5075f550a68..90a57d57cff 100644
+index f308f99a251..eab720e10fd 100644
 --- a/gcc/config/mips/mips-cpus.def
 +++ b/gcc/config/mips/mips-cpus.def
 @@ -62,6 +62,7 @@ MIPS_CPU ("r3900", PROCESSOR_R3900, 1, 0)
@@ -246,7 +246,7 @@ index 5075f550a68..90a57d57cff 100644
  /* MIPS III processors.  */
  MIPS_CPU ("r4000", PROCESSOR_R4000, 3, 0)
 diff --git a/gcc/config/mips/mips-ftypes.def b/gcc/config/mips/mips-ftypes.def
-index 5b5dc6b609f..d3fe6e17745 100644
+index ece9a958d71..c3554ec7c46 100644
 --- a/gcc/config/mips/mips-ftypes.def
 +++ b/gcc/config/mips/mips-ftypes.def
 @@ -44,6 +44,8 @@ DEF_MIPS_FTYPE (3, (DI, DI, USI, USI))
@@ -275,7 +275,7 @@ index 5b5dc6b609f..d3fe6e17745 100644
  DEF_MIPS_FTYPE (3, (VOID, V4SI, CVPOINTER, SI))
  DEF_MIPS_FTYPE (3, (VOID, V8HI, CVPOINTER, SI))
 diff --git a/gcc/config/mips/mips.c b/gcc/config/mips/mips.c
-index d758fbf1be6..423b213d9d3 100644
+index 513fc5fe295..63aa1b43bb0 100644
 --- a/gcc/config/mips/mips.c
 +++ b/gcc/config/mips/mips.c
 @@ -263,7 +263,12 @@ enum mips_builtin_type {
@@ -313,7 +313,7 @@ index d758fbf1be6..423b213d9d3 100644
    { /* Loongson-2E */
      DEFAULT_COSTS
    },
-@@ -15260,6 +15272,7 @@ AVAIL_NON_MIPS16 (dsp_64, TARGET_64BIT && TARGET_DSP)
+@@ -15266,6 +15278,7 @@ AVAIL_NON_MIPS16 (dsp_64, TARGET_64BIT && TARGET_DSP)
  AVAIL_NON_MIPS16 (dspr2_32, !TARGET_64BIT && TARGET_DSPR2)
  AVAIL_NON_MIPS16 (loongson, TARGET_LOONGSON_MMI)
  AVAIL_NON_MIPS16 (cache, TARGET_CACHE_BUILTIN)
@@ -321,9 +321,9 @@ index d758fbf1be6..423b213d9d3 100644
  AVAIL_NON_MIPS16 (msa, TARGET_MSA)
  
  /* Construct a mips_builtin_description from the given arguments.
-@@ -15357,6 +15370,30 @@ AVAIL_NON_MIPS16 (msa, TARGET_MSA)
+@@ -15372,6 +15385,30 @@ AVAIL_NON_MIPS16 (msa, TARGET_MSA)
    MIPS_BUILTIN (bposge, f, "bposge" #VALUE,				\
- 		MIPS_BUILTIN_BPOSGE ## VALUE, MIPS_SI_FTYPE_VOID, AVAIL)
+ 		MIPS_BUILTIN_BPOSGE ## VALUE, MIPS_SI_FTYPE_VOID, AVAIL, false)
  
 +/* Define a MIPS_BUILTIN_DIRECT function for instruction CODE_FOR_allegrex_<INSN>.
 +   FUNCTION_TYPE and TARGET_FLAGS are builtin_description fields.  */
@@ -352,9 +352,9 @@ index d758fbf1be6..423b213d9d3 100644
  /* Define a Loongson MIPS_BUILTIN_DIRECT function __builtin_loongson_<FN_NAME>
     for instruction CODE_FOR_loongson_<INSN>.  FUNCTION_TYPE is a
     builtin_description field.  */
-@@ -15832,6 +15869,38 @@ static const struct mips_builtin_description mips_builtins[] = {
-   DIRECT_BUILTIN (dpsqx_s_w_ph, MIPS_DI_FTYPE_DI_V2HI_V2HI, dspr2_32),
-   DIRECT_BUILTIN (dpsqx_sa_w_ph, MIPS_DI_FTYPE_DI_V2HI_V2HI, dspr2_32),
+@@ -15855,6 +15892,38 @@ static const struct mips_builtin_description mips_builtins[] = {
+   DIRECT_BUILTIN_PURE (dpsqx_s_w_ph, MIPS_DI_FTYPE_DI_V2HI_V2HI, dspr2_32),
+   DIRECT_BUILTIN_PURE (dpsqx_sa_w_ph, MIPS_DI_FTYPE_DI_V2HI_V2HI, dspr2_32),
  
 +/* Builtin functions for the Sony ALLEGREX processor.
 +
@@ -391,7 +391,7 @@ index d758fbf1be6..423b213d9d3 100644
    /* Builtin functions for ST Microelectronics Loongson-2E/2F cores.  */
    LOONGSON_BUILTIN (packsswh, MIPS_V4HI_FTYPE_V2SI_V2SI),
    LOONGSON_BUILTIN (packsshb, MIPS_V8QI_FTYPE_V4HI_V4HI),
-@@ -16520,6 +16589,7 @@ mips_build_cvpointer_type (void)
+@@ -16543,6 +16612,7 @@ mips_build_cvpointer_type (void)
  #define MIPS_ATYPE_UQI unsigned_intQI_type_node
  #define MIPS_ATYPE_HI intHI_type_node
  #define MIPS_ATYPE_SI intSI_type_node
@@ -399,7 +399,7 @@ index d758fbf1be6..423b213d9d3 100644
  #define MIPS_ATYPE_USI unsigned_intSI_type_node
  #define MIPS_ATYPE_DI intDI_type_node
  #define MIPS_ATYPE_UDI unsigned_intDI_type_node
-@@ -17204,6 +17274,26 @@ mips_expand_builtin_bposge (enum mips_builtin_type builtin_type, rtx target)
+@@ -17249,6 +17319,26 @@ mips_expand_builtin_bposge (enum mips_builtin_type builtin_type, rtx target)
  				       const1_rtx, const0_rtx);
  }
  
@@ -426,7 +426,7 @@ index d758fbf1be6..423b213d9d3 100644
  /* Implement TARGET_EXPAND_BUILTIN.  */
  
  static rtx
-@@ -17252,6 +17342,9 @@ mips_expand_builtin (tree exp, rtx target, rtx subtarget ATTRIBUTE_UNUSED,
+@@ -17297,6 +17387,9 @@ mips_expand_builtin (tree exp, rtx target, rtx subtarget ATTRIBUTE_UNUSED,
  
      case MIPS_BUILTIN_BPOSGE32:
        return mips_expand_builtin_bposge (d->builtin_type, target);
@@ -436,7 +436,7 @@ index d758fbf1be6..423b213d9d3 100644
      }
    gcc_unreachable ();
  }
-@@ -20396,6 +20489,22 @@ mips_option_override (void)
+@@ -20443,6 +20536,22 @@ mips_option_override (void)
    if (TARGET_HARD_FLOAT_ABI && TARGET_MIPS5900)
      REAL_MODE_FORMAT (SFmode) = &spu_single_format;
  
@@ -460,7 +460,7 @@ index d758fbf1be6..423b213d9d3 100644
  }
  
 diff --git a/gcc/config/mips/mips.h b/gcc/config/mips/mips.h
-index 953d82e85c2..feac072413e 100644
+index 3ce0c19a29a..4d5e3d307eb 100644
 --- a/gcc/config/mips/mips.h
 +++ b/gcc/config/mips/mips.h
 @@ -287,6 +287,7 @@ struct mips_cpu_info {
@@ -540,7 +540,7 @@ index 953d82e85c2..feac072413e 100644
  
  /* ISA includes synci, jr.hb and jalr.hb.  */
  #define ISA_HAS_SYNCI (mips_isa_rev >= 2 && !TARGET_MIPS16)
-@@ -2421,7 +2432,7 @@ enum reg_class
+@@ -2398,7 +2409,7 @@ enum reg_class
     `crtl->outgoing_args_size'.  */
  #define OUTGOING_REG_PARM_STACK_SPACE(FNTYPE) 1
  
@@ -549,7 +549,7 @@ index 953d82e85c2..feac072413e 100644
  
  /* Symbolic macros for the registers used to return integer and floating
     point values.  */
-@@ -2548,7 +2559,7 @@ typedef struct mips_args {
+@@ -2525,7 +2536,7 @@ typedef struct mips_args {
  /* Treat LOC as a byte offset from the stack pointer and round it up
     to the next fully-aligned offset.  */
  #define MIPS_STACK_ALIGN(LOC) \
@@ -558,7 +558,7 @@ index 953d82e85c2..feac072413e 100644
  
  
  /* Output assembler code to FILE to increment profiler label # LABELNO
-@@ -3197,6 +3208,9 @@ while (0)
+@@ -3174,6 +3185,9 @@ while (0)
  	" TEXT_SECTION_ASM_OP);
  #endif
  
@@ -569,7 +569,7 @@ index 953d82e85c2..feac072413e 100644
  #define HAVE_AS_TLS 0
  #endif
 diff --git a/gcc/config/mips/mips.md b/gcc/config/mips/mips.md
-index 3cfb1a751e9..e9bb06e267a 100644
+index 6383a31a5e3..40fcd192bd2 100644
 --- a/gcc/config/mips/mips.md
 +++ b/gcc/config/mips/mips.md
 @@ -35,6 +35,7 @@
@@ -580,7 +580,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
    loongson_2e
    loongson_2f
    gs464
-@@ -813,6 +814,7 @@
+@@ -819,6 +820,7 @@
  (define_mode_iterator MOVECC [SI (DI "TARGET_64BIT")
                                (CC "TARGET_HARD_FLOAT
  				   && !TARGET_LOONGSON_2EF
@@ -588,7 +588,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
  				   && !TARGET_MIPS5900")])
  
  ;; This mode iterator allows :FPCC to be used anywhere that an FP condition
-@@ -2254,11 +2256,11 @@
+@@ -2260,11 +2262,11 @@
  	   (mult:DI
  	      (any_extend:DI (match_operand:SI 1 "register_operand" "d"))
  	      (any_extend:DI (match_operand:SI 2 "register_operand" "d")))))]
@@ -602,7 +602,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
      return "msub<u>\t%1,%2";
    else
      return "msac<u>\t$0,%1,%2";
-@@ -2528,14 +2530,14 @@
+@@ -2543,14 +2545,14 @@
  	 (mult:DI (any_extend:DI (match_operand:SI 1 "register_operand" "d"))
  		  (any_extend:DI (match_operand:SI 2 "register_operand" "d")))
  	 (match_operand:DI 3 "muldiv_target_operand" "0")))]
@@ -619,7 +619,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
      return "madd<u>\t%1,%2";
    else
      /* See comment in *macc.  */
-@@ -3193,6 +3195,33 @@
+@@ -3208,6 +3210,33 @@
    [(set_attr "type" "pop")
     (set_attr "mode" "SI")])
  
@@ -653,7 +653,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
  ;;
  ;;  ....................
  ;;
-@@ -3248,6 +3277,25 @@
+@@ -3263,6 +3292,25 @@
     (set_attr "compression" "micromips,*")
     (set_attr "mode" "<MODE>")])
  
@@ -679,7 +679,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
  ;;
  ;;  ....................
  ;;
-@@ -7282,7 +7330,7 @@
+@@ -7297,7 +7345,7 @@
  		 (const_int 0)])
  	 (match_operand:GPR 2 "reg_or_0_operand" "dJ,0")
  	 (match_operand:GPR 3 "reg_or_0_operand" "0,dJ")))]
@@ -688,7 +688,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
    "@
      mov%T4\t%0,%z2,%1
      mov%t4\t%0,%z3,%1"
-@@ -7360,7 +7408,7 @@
+@@ -7375,7 +7423,7 @@
  	(if_then_else:GPR (match_dup 5)
  			  (match_operand:GPR 2 "reg_or_0_operand")
  			  (match_operand:GPR 3 "reg_or_0_operand")))]
@@ -697,7 +697,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
  {
    if (!ISA_HAS_FP_CONDMOVE
        && !INTEGRAL_MODE_P (GET_MODE (XEXP (operands[1], 0))))
-@@ -7780,6 +7828,9 @@
+@@ -7795,6 +7843,9 @@
  ; The MIPS MSA Instructions.
  (include "mips-msa.md")
  
@@ -708,7 +708,7 @@ index 3cfb1a751e9..e9bb06e267a 100644
    UNSPEC_ADDRESS_FIRST
  ])
 diff --git a/gcc/config/mips/mips.opt b/gcc/config/mips/mips.opt
-index 817a4823d99..de367180953 100644
+index 1f192965bfa..57cc1247097 100644
 --- a/gcc/config/mips/mips.opt
 +++ b/gcc/config/mips/mips.opt
 @@ -440,6 +440,10 @@ mframe-header-opt
@@ -782,7 +782,7 @@ index 00000000000..cfb3f97174b
 +LIBGCC = stmp-multilib
 +INSTALL_LIBGCC = install-multilib
 diff --git a/libcpp/Makefile.in b/libcpp/Makefile.in
-index 81be1fd67ec..a7cba2c21a9 100644
+index 8f8c8f65eb3..2a8a7f30c58 100644
 --- a/libcpp/Makefile.in
 +++ b/libcpp/Makefile.in
 @@ -208,8 +208,8 @@ ifeq ($(DEPMODE),depmode=gcc3)
@@ -797,10 +797,10 @@ index 81be1fd67ec..a7cba2c21a9 100644
  COMPILE = source='$<' object='$@' libtool=no DEPDIR=$(DEPDIR) $(DEPMODE) \
  	  $(depcomp) $(COMPILE.base)
 diff --git a/libgcc/config.host b/libgcc/config.host
-index 0f15fda3612..ccff9d5c695 100644
+index c529cc40f0c..2661e3e2fed 100644
 --- a/libgcc/config.host
 +++ b/libgcc/config.host
-@@ -147,11 +147,15 @@ microblaze*-*-*)
+@@ -150,11 +150,15 @@ microblaze*-*-*)
  	cpu_type=microblaze
  	;;
  mips*-*-*)
@@ -818,7 +818,7 @@ index 0f15fda3612..ccff9d5c695 100644
  	else
  		tmake_file="${tmake_file} t-softfp-sfdf"
  	fi
-@@ -987,6 +991,14 @@ mips-wrs-vxworks)
+@@ -1061,6 +1065,14 @@ mips-wrs-vxworks)
  mipstx39-*-elf* | mipstx39el-*-elf*)
  	tmake_file="$tmake_file mips/t-crtstuff mips/t-mips16"
  	;;
@@ -918,10 +918,10 @@ index 00000000000..10682690219
 +    _lt_sf _le_sf _unord_sf _si_to_sf _sf_to_si _negate_sf \
 +    _thenan_sf _sf_to_usi _usi_to_sf
 diff --git a/libgcc/configure b/libgcc/configure
-index 36dbbc1f699..92517a1f931 100644
+index 26bf75789e0..81d0519866d 100755
 --- a/libgcc/configure
 +++ b/libgcc/configure
-@@ -5036,6 +5036,26 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+@@ -5094,6 +5094,26 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
  fi
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $libgcc_cv_mips_hard_float" >&5
  $as_echo "$libgcc_cv_mips_hard_float" >&6; }
@@ -949,10 +949,10 @@ index 36dbbc1f699..92517a1f931 100644
  
  case ${host} in
 diff --git a/libgcc/configure.ac b/libgcc/configure.ac
-index 8e96cafdf8b..77af122b546 100644
+index bff6e54f22e..3a916b74e1a 100644
 --- a/libgcc/configure.ac
 +++ b/libgcc/configure.ac
-@@ -302,6 +302,14 @@ mips*-*-*)
+@@ -337,6 +337,14 @@ mips*-*-*)
      ])],
      [libgcc_cv_mips_hard_float=yes],
      [libgcc_cv_mips_hard_float=no])])
@@ -968,7 +968,7 @@ index 8e96cafdf8b..77af122b546 100644
  
  case ${host} in
 diff --git a/libgcc/crtstuff.c b/libgcc/crtstuff.c
-index 4927a9f8977..2a79e3e137d 100644
+index 3f769a1c660..56a1c1bd064 100644
 --- a/libgcc/crtstuff.c
 +++ b/libgcc/crtstuff.c
 @@ -47,7 +47,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
