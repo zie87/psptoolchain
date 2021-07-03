@@ -3,7 +3,7 @@
 # gdc support from TurkeyMan( https://github.com/TurkeyMan )
 
  ## set gcc version
- GCC_VERSION=9.3.0
+ GCC_VERSION=11.1.0
  GMP_VERSION=6.1.2
  MPC_VERSION=1.1.0
  MPFR_VERSION=4.0.2
